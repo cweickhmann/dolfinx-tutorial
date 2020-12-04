@@ -180,6 +180,30 @@
     <!-- Table of contents -->
     <div class="d-none d-md-block col-md-2 bd-toc show">
         
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Requirements for dockerfile
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#build-image-for-dockerhub">
+   Build image for dockerhub
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#push-to-dockerhub">
+   Push to dockerhub
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
     </div>
 </div>
     <div id="main-content" class="row">
@@ -200,6 +224,14 @@ jupyter-book build .
 <div class="section" id="requirements-for-dockerfile">
 <h1>Requirements for dockerfile<a class="headerlink" href="#requirements-for-dockerfile" title="Permalink to this headline">¶</a></h1>
 <p>https://mybinder.readthedocs.io/en/latest/tutorials/dockerfile.html</p>
+</div>
+<div class="section" id="build-image-for-dockerhub">
+<h1>Build image for dockerhub<a class="headerlink" href="#build-image-for-dockerhub" title="Permalink to this headline">¶</a></h1>
+<p>docker build . –tag dokken92/dolfinx_custom:tutorials</p>
+</div>
+<div class="section" id="push-to-dockerhub">
+<h1>Push to dockerhub<a class="headerlink" href="#push-to-dockerhub" title="Permalink to this headline">¶</a></h1>
+<p>docker push dokken92/dolfinx_custom:tutorials</p>
 </div>
 
     <script type="text/x-thebe-config">
