@@ -423,8 +423,7 @@ be produces to machine precision by the program.</p>
 </div>
 </div>
 </div>
-<p>Not as opposed to a traditional FEniCS code, FEniCS-X is more modular. Instead of wrapping <a class="reference external" href="https://mpi4py.readthedocs.io/en/stable/">MPI</a> and <a class="reference external" href="https://pypi.org/project/petsc4py/">PETSc</a> modules inside dolfin-X, we would like to directly use the modules, as they are  well documented and makes dolfin-X easier
-to understand.</p>
+<p>A major difference between a traditional FEniCS code and a FEniCS-X code, is that one is not advised to use the wildcard import. Instead of wrapping <a class="reference external" href="https://mpi4py.readthedocs.io/en/stable/">MPI</a> and <a class="reference external" href="https://pypi.org/project/petsc4py/">PETSc</a> modules inside dolfin-X, we would like to directly use the modules, as they are  well documented and makes dolfin-X easier to understand.</p>
 </div>
 <div class="section" id="generating-simple-meshes">
 <h2>Generating  simple meshes<a class="headerlink" href="#generating-simple-meshes" title="Permalink to this headline">¶</a></h2>
@@ -568,7 +567,7 @@ This is the key strength of FEniCS-X: the formulas in the variational formulatio
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/t1_17_01.png" src="../_images/t1_17_01.png" />
+<img alt="../_images/t1_17_0.png" src="../_images/t1_17_0.png" />
 </div>
 </div>
 <p>We start by plotting the solution of the function, and overlays it with the mesh. Finally, we save the plot with matplotlib.
