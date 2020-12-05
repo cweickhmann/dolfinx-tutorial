@@ -57,7 +57,7 @@
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Solving the Poisson equation" href="chapter1/fundamentals.html" />
+    <link rel="next" title="An overview of the FEniCS Project" href="fem.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -96,6 +96,28 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
+  Introduction
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="fem.html">
+   An overview of the FEniCS Project
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="fem.html#what-you-will-learn">
+   What you will learn
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="fem.html#how-to-use-this-tutorial">
+   How to use this tutorial
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
   Fundamentals
  </span>
 </p>
@@ -103,6 +125,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="chapter1/fundamentals.html">
    Solving the Poisson equation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="chapter1/implementation1.html">
+   Implementation
   </a>
  </li>
  <li class="toctree-l1">
@@ -196,43 +223,11 @@
         </div>
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#">
-   The FEniCS-X tutorial
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#interative-tutorials">
+   Interative tutorials
   </a>
   <ul class="nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#the-fenics-project">
-     The FEniCS Project
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#what-you-will-learn">
-     What you will learn
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#working-with-this-tutorial">
-   Working with this tutorial
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#obtaining-the-software">
-     Obtaining the software
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#docker">
-     Docker
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#the-finite-element-method">
-     The Finite element method
-    </a>
-   </li>
   </ul>
  </li>
 </ul>
@@ -250,50 +245,12 @@
 <h1>The FEniCS-X tutorial<a class="headerlink" href="#the-fenics-x-tutorial" title="Permalink to this headline">¶</a></h1>
 <p>This webpage gives a concise overview of the functionality of <a class="reference external" href="https://github.com/FEniCS/dolfinx/">Dolfin-X</a>, including a gentle introduction to the finite element method. This webpage is an adaptation of the <a class="reference external" href="https://www.springer.com/gp/book/9783319524610">FEniCS tutorial</a>.</p>
 <p>Dolfin-X can be used as either a C++ or Python software, but this tutorial will focus on Python programming, as it is the simplest and most effective approach for beginners. After having gone through this tutorial, the reader should familiarize themselfs with the Dolfin-X <a class="reference external" href="https://fenicsproject.org/docs/dolfinx/dev/python/">documentation</a>, which includes the API and numerous demos.</p>
-<p>Comments and corrections to this webpage should be submitted to <a class="reference external" href="https://github.com/jorgensd/dolfinx-tutorial/issues">dolfinx-tutorial issue tracker</a>.</p>
-<div class="section" id="the-fenics-project">
-<h2>The FEniCS Project<a class="headerlink" href="#the-fenics-project" title="Permalink to this headline">¶</a></h2>
-<p>The FEniCS project is a research and software project aimed at creating mathematical methods and software for solving partial differential equations. This includes creating intuitive, efficient and flexible software. The project was initiated in 2003, and is developed in collaboration between researchers from a number of universities and research institutes around the world. For the latest updates and more information about the FEniCS project, visit the <a class="reference external" href="https://fenicsproject.org">FEniCS</a> webpage.</p>
-<p>The latest version of the FEniCS project, FEniCS-X, consists of several building blocks, namely <a class="reference external" href="https://github.com/FEniCS/fiat">FIAT</a>/<a class="reference external" href="https://github.com/FEniCS/libtab">LibTab</a>, <a class="reference external" href="https://github.com/FEniCS/ufl">UFL</a>, <a class="reference external" href="https://github.com/FEniCS/ffcx">FFC-X</a> and <a class="reference external" href="https://github.com/FEniCS/dolfinx">Dolfin-X</a>. We will now go through the main objectives of each of these building blocks. Dolfin-X is the high performance C++ backend of FEniCS-X, where structures such as meshes, function spaces and functions are implemented.
-Additionally, Dolfin-X also contains compute intensive functions such as finite element assembly and mesh refinement algorithms. It also provides an interface to linear algebra solvers and data-structures, such as <a class="reference external" href="https://www.mcs.anl.gov/petsc/">PETSc</a>. UFL is a high-level form language for describing variational formulations with a high-level mathematical syntax. FFC-X is the form compiler of FEniCS; given variational formulations written with UFL, it generates efficient C code. FIAT/LibTab is the finite element backend of FEniCS, responsible for generating finite element basis functions.</p>
+<p>Comments and corrections to this webpage should be submitted to dolfinx-tutorial issue tracker by going to the relevant page in the tutorial, then click the <img alt="git" src="_images/git.png" />-symbol in the top right corner and “open issue”.</p>
+<div class="section" id="interative-tutorials">
+<h2>Interative tutorials<a class="headerlink" href="#interative-tutorials" title="Permalink to this headline">¶</a></h2>
+<p>As this book has been published as a Jupyter Book, we provide interactive notebooks that can be ran in the browser. To start such a notebook click the <img alt="Binder symbol" src="_images/binder.png" />-symbol in the top right corner of the relevant tutorial.</p>
+<div class="toctree-wrapper compound">
 </div>
-<div class="section" id="what-you-will-learn">
-<h2>What you will learn<a class="headerlink" href="#what-you-will-learn" title="Permalink to this headline">¶</a></h2>
-<p>The goal of this tutorial is to demonstrate how to apply the finite element to solve PDEs in FEniCS. Through a series of examples, we will demonstrate how to:</p>
-<ul class="simple">
-<li><p>Solve linear PDEs (such as the Poisson equation),</p></li>
-<li><p>Solve time-dependent PDEs (such as the heat equation),</p></li>
-<li><p>Solve nonlinear PDEs,</p></li>
-<li><p>Solve systems of time-dependent nonlinear PDEs.</p></li>
-</ul>
-<p>Important topics involve how to set boundary conditions of various types (Dirichlet, Neumann, Robin), how to create meshes, how to define variable coefficients, how to interact with linear and nonlinear solvers, and how to postprocess and visualize solutions.</p>
-</div>
-</div>
-<div class="section" id="working-with-this-tutorial">
-<h1>Working with this tutorial<a class="headerlink" href="#working-with-this-tutorial" title="Permalink to this headline">¶</a></h1>
-<p>Most of the mathematical part of the examples will be kept at a simple level, such that we can keep the focus on the functionality and syntax of FEniCS-X. Therefore we will mostly use the Poisson equation and the time-dependent diffusion equation as model problems. We will use adjusted input data, such that the solution of the problem can be exactly reproduced on uniform, structured meshes with the finite element method. This greatly simplifies the verification of the implementations.
-Occasionally we will consider a more physically relevant example to remind the reader that there are no big leaps from solving simple model problems to challenging real-world problems when using FEniCS-X.</p>
-<div class="section" id="obtaining-the-software">
-<h2>Obtaining the software<a class="headerlink" href="#obtaining-the-software" title="Permalink to this headline">¶</a></h2>
-<p>Working with this tutorial obviously require access to the FEniCS software. The software is quite complex, and building the software and all the dependencies from source can be a daunting task. The list of dependencies can be found at <a class="reference external" href="https://fenicsproject.org/docs/dolfinx/dev/python/installation.html">https://fenicsproject.org/docs/dolfinx/dev/python/installation.html</a>.</p>
-</div>
-<div class="section" id="docker">
-<h2>Docker<a class="headerlink" href="#docker" title="Permalink to this headline">¶</a></h2>
-<p>Fortunately, we supply a pre-built docker image at <a class="reference external" href="https://hub.docker.com/r/dolfinx/dolfinx">https://hub.docker.com/r/dolfinx/dolfinx</a>.
-The <a class="reference external" href="https://github.com/FEniCS/dolfinx/blob/master/Dockerfile">Dockerfile</a>
-provides a definitive build recipe.</p>
-<p>Docker is a software that uses \textit{containers} to supply software across different kinds of operating systems (Linux, Mac, Windows). The first step is to install docker, following the instructions at their <a class="reference external" href="https://docs.docker.com/get-started/">web-page</a>.
-As the dolfinx docker images are hosted at Docker-hub, one can directly access the image</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="n">dolfinx</span><span class="o">/</span><span class="n">dolfin</span>
-</pre></div>
-</div>
-<p>There are several ways of customizing a docker container, such as mounting volumes/sharing folder, setting a working directory, sharing graphical interfaces etc. See <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">--help</span></code> for an extensive list.</p>
-<p>Once you have installed dolfin-X, either by using docker or installing form source, you can test the installation by running <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-c</span> <span class="pre">&quot;import</span> <span class="pre">dolfinx&quot;</span></code>. If all goes well, no error-messages should appear.</p>
-<p>If you are a beginner in Python, we suggest reading <a class="reference external" href="https://link.springer.com/book/10.1007%2F978-3-662-49887-3">A Primer on Scientific Programming in Python</a> by Hans Petter Langtangen, which will give you a gentle introduction to the Python programming language. Note that dolfin-X, being a state of the art finite element solver, only supports Python 3, as Python 2 reached its end of life January 1st, 2020. To automatically transfer Python 2 scripts to Python 3, it is suggested to use the <a class="reference external" href="https://docs.python.org/3/library/2to3.html">2to3</a>-package, which provides automated translation of the code.</p>
-</div>
-<div class="section" id="the-finite-element-method">
-<h2>The Finite element method<a class="headerlink" href="#the-finite-element-method" title="Permalink to this headline">¶</a></h2>
-<p>There has been written many good text-books on the finite element method, and we refer to the original FEniCS tutorial, for references to these, (see Chapter 1.6.2 of <a class="reference external" href="https://www.springer.com/gp/book/9783319524610">The FEniCS tutorial</a>).</p>
 <div class="toctree-wrapper compound">
 </div>
 </div>
@@ -327,7 +284,7 @@ As the dolfinx docker images are hosted at Docker-hub, one can directly access t
     
     <div class='prev-next-bottom'>
         
-    <a class='right-next' id="next-link" href="chapter1/fundamentals.html" title="next page">Solving the Poisson equation</a>
+    <a class='right-next' id="next-link" href="fem.html" title="next page">An overview of the FEniCS Project</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
