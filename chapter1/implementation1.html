@@ -291,11 +291,6 @@
    Computing the error
   </a>
  </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#references">
-   References
-  </a>
- </li>
 </ul>
 
         </nav>
@@ -314,13 +309,13 @@ Therefore, we need to make specific choices of <span class="math notranslate noh
 <!-- Particularly, piecewise linear continuous Galerkin finite elements are able to exactly reproduce a quadratic polynomial on 
 a uniformly partitioned mesh. -->
 <p>We use this fact to construct a quadratic function in <span class="math notranslate nohighlight">\(2D\)</span>. In particular we choose</p>
-<div class="amsmath math notranslate nohighlight" id="equation-c07dfe16-276d-4d7b-969e-5a2047b7b31c">
-<span class="eqno">(1)<a class="headerlink" href="#equation-c07dfe16-276d-4d7b-969e-5a2047b7b31c" title="Permalink to this equation">¶</a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-2436292e-4939-43a4-9f4d-36de8155eeac">
+<span class="eqno">(1)<a class="headerlink" href="#equation-2436292e-4939-43a4-9f4d-36de8155eeac" title="Permalink to this equation">¶</a></span>\[\begin{align}
  u_e(x,y)=1+x^2+2y^2
  \end{align}\]</div>
 <p>Inserting <span class="math notranslate nohighlight">\(u_e\)</span> in the original boundary problem, we find that</p>
-<div class="amsmath math notranslate nohighlight" id="equation-65c5d455-dc86-43cf-838a-7508feff0fd9">
-<span class="eqno">(2)<a class="headerlink" href="#equation-65c5d455-dc86-43cf-838a-7508feff0fd9" title="Permalink to this equation">¶</a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-b7c06c3c-c8cc-4094-bdf9-97d692fe241a">
+<span class="eqno">(2)<a class="headerlink" href="#equation-b7c06c3c-c8cc-4094-bdf9-97d692fe241a" title="Permalink to this equation">¶</a></span>\[\begin{align}
     f(x,y)= -6,\qquad u_d(x,y)=u_e(x,y)=1+x^2+2y^2,
 \end{align}\]</div>
 <p>regardless of the shape of the domain as long as we prescribe
@@ -459,7 +454,7 @@ C code for creating the linear system, as opposed to
 </div>
 <p>Note that there is a very close correspondence between the Python syntax and the mathematical syntax
 <span class="math notranslate nohighlight">\(\nabla u \cdot \nabla v \mathrm{d} x\)</span> and <span class="math notranslate nohighlight">\(fv\mathrm{d} x\)</span>.
-This is the key strength of FEniCS-X: the formulas in the variational formulation translate directly to very similar Python code, a feature that makes it easy to specify and solve complicated PDE problems. The language used to express weak forms is the Unified Form Language (UFL)<span class="bibtex" id="id1">[ufl2014]</span>.</p>
+This is the key strength of FEniCS-X: the formulas in the variational formulation translate directly to very similar Python code, a feature that makes it easy to specify and solve complicated PDE problems. The language used to express weak forms is the Unified Form Language <a class="reference external" href="https://doi.org/10.1145/2566630">UFL</a>.</p>
 </div>
 <div class="section" id="expressing-inner-products">
 <h2>Expressing inner products<a class="headerlink" href="#expressing-inner-products" title="Permalink to this headline">¶</a></h2>
@@ -557,10 +552,6 @@ Error_max = 2.22e-15
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
-<p id="bibtex-bibliography-chapter1/implementation1-0"></p>
 </div>
 </div>
 
