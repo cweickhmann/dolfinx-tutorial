@@ -272,6 +272,11 @@
   <a class="reference internal nav-link" href="#plotting-the-solution">
    Plotting the solution
   </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#making-curve-plots-throughout-the-domain">
+   Making curve plots throughout the domain
+  </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#using-paraview">
@@ -491,10 +496,50 @@ Python-classes. The class will have an initializer, where we store the two physi
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.tri.tricontour.TriContourSet at 0x7f111f0feee0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.tri.tricontour.TriContourSet at 0x7f5c8e01feb0&gt;
 </pre></div>
 </div>
 <img alt="../_images/membrane_code_27_1.png" src="../_images/membrane_code_27_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="making-curve-plots-throughout-the-domain">
+<h2>Making curve plots throughout the domain<a class="headerlink" href="#making-curve-plots-throughout-the-domain" title="Permalink to this headline">¶</a></h2>
+<p>Another way to compare the deflection and the load is to make a plot along the line <span class="math notranslate nohighlight">\(x=0\)</span>. This is just a matter of defining a set of points along the <span class="math notranslate nohighlight">\(y\)</span>-axis and evaluating the finite element functions <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(p\)</span> at these points:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tol</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="c1"># Avoid hitting the outside of the domain</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="n">tol</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">tol</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
+<span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">101</span><span class="p">))</span>
+<span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
+<span class="n">u_values</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">p_values</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="kn">import</span> <span class="nn">dolfinx.geometry</span>
+<span class="n">bb_tree</span> <span class="o">=</span> <span class="n">dolfinx</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">BoundingBoxTree</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
+<span class="n">cells</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">points</span><span class="o">.</span><span class="n">T</span><span class="p">:</span>
+    <span class="c1"># Find cells that are close to the point</span>
+    <span class="n">cell_candidates</span> <span class="o">=</span> <span class="n">dolfinx</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">compute_collisions_point</span><span class="p">(</span><span class="n">bb_tree</span><span class="p">,</span> <span class="n">point</span><span class="p">)</span>
+    <span class="c1"># Choose one of the cells that contains the point</span>
+    <span class="n">cell</span> <span class="o">=</span> <span class="n">dolfinx</span><span class="o">.</span><span class="n">cpp</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">select_colliding_cells</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">cell_candidates</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">cells</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
+<span class="n">u_values</span> <span class="o">=</span> <span class="n">uh</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cells</span><span class="p">)</span>
+<span class="n">p_values</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cells</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mf">7.5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">50</span><span class="o">*</span><span class="n">u_values</span><span class="p">,</span> <span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Deflection ($</span><span class="se">\\</span><span class="s2">times 50$)&quot;</span><span class="p">)</span> <span class="c1"># Magnify w</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">p_values</span><span class="p">,</span> <span class="s2">&quot;b--&quot;</span><span class="p">,</span> <span class="n">linewidth</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Load&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f5c8ce11910&gt;
+</pre></div>
+</div>
+<img alt="../_images/membrane_code_29_1.png" src="../_images/membrane_code_29_1.png" />
 </div>
 </div>
 <div class="section" id="using-paraview">
