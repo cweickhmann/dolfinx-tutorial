@@ -323,8 +323,8 @@
   <div class="section" id="test-problem-2-diffusion-of-a-gaussian-function">
 <h1>Test Problem 2: Diffusion of a Gaussian function<a class="headerlink" href="#test-problem-2-diffusion-of-a-gaussian-function" title="Permalink to this headline">¶</a></h1>
 <p>Let us now solve a more interesting problem, namely the diffusion of a Gaussian hill. We take the initial value to be</p>
-<div class="amsmath math notranslate nohighlight" id="equation-b90e4b71-9325-442a-9403-26463afbf918">
-<span class="eqno">(19)<a class="headerlink" href="#equation-b90e4b71-9325-442a-9403-26463afbf918" title="Permalink to this equation">¶</a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-d81e6540-f053-4053-b704-955e36bcaadd">
+<span class="eqno">(19)<a class="headerlink" href="#equation-d81e6540-f053-4053-b704-955e36bcaadd" title="Permalink to this equation">¶</a></span>\[\begin{align}
     u_0(x,y)&amp;= e^{-ax^2-ay^2}
 \end{align}\]</div>
 <p>for <span class="math notranslate nohighlight">\(a=5\)</span> on the domain <span class="math notranslate nohighlight">\([-2,-2]\times[2,2]\)</span>. For this problem we will use homogeneous Dirichlet boundary conditions (<span class="math notranslate nohighlight">\(u_D=0\)</span>).</p>
@@ -340,7 +340,7 @@
 <span class="c1"># Define temporal parameters</span>
 <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># Start time</span>
 <span class="n">T</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="c1"># Final time</span>
-<span class="n">num_steps</span> <span class="o">=</span> <span class="mi">50</span>      
+<span class="n">num_steps</span> <span class="o">=</span> <span class="mi">61</span>     
 <span class="n">dt</span> <span class="o">=</span> <span class="n">T</span> <span class="o">/</span> <span class="n">num_steps</span> <span class="c1"># time step size</span>
 
 <span class="c1"># Define mesh</span>
@@ -385,7 +385,12 @@ this could be read (<code class="docutils literal notranslate"><span class="pre"
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dolfinx.io</span> <span class="k">import</span> <span class="n">XDMFFile</span>
 <span class="n">xdmf</span> <span class="o">=</span> <span class="n">XDMFFile</span><span class="p">(</span><span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span><span class="p">,</span> <span class="s2">&quot;diffusion.xdmf&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
 <span class="n">xdmf</span><span class="o">.</span><span class="n">write_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
-<span class="n">xdmf</span><span class="o">.</span><span class="n">write_function</span><span class="p">(</span><span class="n">u_n</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+<span class="c1"># Define solution variable, and interpolate initial solution for visualization in Paraview</span>
+<span class="n">uh</span> <span class="o">=</span> <span class="n">dolfinx</span><span class="o">.</span><span class="n">Function</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+<span class="n">uh</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;uh&quot;</span>
+<span class="n">uh</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">initial_condition</span><span class="p">)</span>
+<span class="n">uh</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">ghostUpdate</span><span class="p">(</span><span class="n">addv</span><span class="o">=</span><span class="n">PETSc</span><span class="o">.</span><span class="n">InsertMode</span><span class="o">.</span><span class="n">INSERT</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">PETSc</span><span class="o">.</span><span class="n">ScatterMode</span><span class="o">.</span><span class="n">FORWARD</span><span class="p">)</span>
+<span class="n">xdmf</span><span class="o">.</span><span class="n">write_function</span><span class="p">(</span><span class="n">uh</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -410,9 +415,7 @@ this could be read (<code class="docutils literal notranslate"><span class="pre"
 <span class="n">b</span> <span class="o">=</span> <span class="n">dolfinx</span><span class="o">.</span><span class="n">fem</span><span class="o">.</span><span class="n">assemble_vector</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
 <span class="n">b</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
-<span class="c1"># Create solver and data structure for solution</span>
-<span class="n">uh</span> <span class="o">=</span> <span class="n">dolfinx</span><span class="o">.</span><span class="n">Function</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
-<span class="n">uh</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;uh&quot;</span>
+<span class="c1"># Create solver</span>
 <span class="n">solver</span> <span class="o">=</span> <span class="n">PETSc</span><span class="o">.</span><span class="n">KSP</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">mpi_comm</span><span class="p">())</span>
 <span class="n">solver</span><span class="o">.</span><span class="n">setOperators</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 <span class="n">solver</span><span class="o">.</span><span class="n">setType</span><span class="p">(</span><span class="n">PETSc</span><span class="o">.</span><span class="n">KSP</span><span class="o">.</span><span class="n">Type</span><span class="o">.</span><span class="n">PREONLY</span><span class="p">)</span>
@@ -428,6 +431,15 @@ this could be read (<code class="docutils literal notranslate"><span class="pre"
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="kn">import</span> <span class="nn">dolfinx.plotting</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="c1"># Define minimum and maximum values for plotting</span>
+<span class="n">min_color</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">u_n</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">array</span><span class="p">)</span>
+<span class="n">max_color</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">u_n</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">array</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">dolfinx</span><span class="o">.</span><span class="n">plotting</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">u_n</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">min_color</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">max_color</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Time: </span><span class="si">{0:.2e}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c1"># Prepare for animation plot</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_steps</span><span class="p">):</span>
     <span class="n">t</span> <span class="o">+=</span> <span class="n">dt</span>
 
@@ -447,18 +459,33 @@ this could be read (<code class="docutils literal notranslate"><span class="pre"
     <span class="n">uh</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">result</span><span class="o">=</span><span class="n">u_n</span><span class="o">.</span><span class="n">vector</span><span class="p">)</span>
     <span class="c1"># Write solution to file</span>
     <span class="n">xdmf</span><span class="o">.</span><span class="n">write_function</span><span class="p">(</span><span class="n">uh</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
-    <span class="n">dolfinx</span><span class="o">.</span><span class="n">plotting</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">uh</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Time: </span><span class="si">{0:.2e}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+    <span class="c1"># Plot every 20th time step</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">15</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">min_color</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">uh</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">array</span><span class="p">)</span>
+        <span class="n">max_color</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">uh</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">array</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">dolfinx</span><span class="o">.</span><span class="n">plotting</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">uh</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">min_color</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">max_color</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Time: </span><span class="si">{0:.2e}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
 <span class="n">xdmf</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <img alt="../_images/diffusion_code_9_0.png" src="../_images/diffusion_code_9_0.png" />
+<img alt="../_images/diffusion_code_9_1.png" src="../_images/diffusion_code_9_1.png" />
+<img alt="../_images/diffusion_code_9_2.png" src="../_images/diffusion_code_9_2.png" />
+<img alt="../_images/diffusion_code_9_3.png" src="../_images/diffusion_code_9_3.png" />
+<img alt="../_images/diffusion_code_9_4.png" src="../_images/diffusion_code_9_4.png" />
+<img alt="../_images/diffusion_code_9_5.png" src="../_images/diffusion_code_9_5.png" />
 </div>
 </div>
 </div>
 <div class="section" id="animation-with-paraview">
 <h2>Animation with Paraview<a class="headerlink" href="#animation-with-paraview" title="Permalink to this headline">¶</a></h2>
+<p>We can also use Paraview to create an animation. We open the file in paraview with <code class="docutils literal notranslate"><span class="pre">File-&gt;Open</span></code>, and then press <code class="docutils literal notranslate"><span class="pre">Apply</span></code> in the properties panel.</p>
+<p>Then, we add a time-annotation to the figure, pressing: <code class="docutils literal notranslate"><span class="pre">Sources-&gt;Alphabetical-&gt;Annotate</span> <span class="pre">Time</span></code> and <code class="docutils literal notranslate"><span class="pre">Apply</span></code> in the properties panel. It Is also a good idea to select an output resolution, by pressing <code class="docutils literal notranslate"><span class="pre">View-&gt;Preview-&gt;1280</span> <span class="pre">x</span> <span class="pre">720</span> <span class="pre">(HD)</span></code>.</p>
+<p>Then finally, click <code class="docutils literal notranslate"><span class="pre">File-&gt;Save</span> <span class="pre">Animation</span></code>, and save the animation to the desired format, such as <code class="docutils literal notranslate"><span class="pre">avi</span></code>, <code class="docutils literal notranslate"><span class="pre">ogv</span></code> or a sequence of <code class="docutils literal notranslate"><span class="pre">png</span></code>s. Make sure to set the framerate to something, sensible, in the range of <span class="math notranslate nohighlight">\(5-10\)</span> frames per second.</p>
 </div>
 </div>
 
