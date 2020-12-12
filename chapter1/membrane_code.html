@@ -57,6 +57,7 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Using Paraview for visualization" href="membrane_paraview.html" />
     <link rel="prev" title="Deflection of a membrane" href="membrane.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -144,6 +145,11 @@
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      Implementation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="membrane_paraview.html">
+     Using Paraview for visualization
     </a>
    </li>
   </ul>
@@ -269,21 +275,19 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#plotting-the-solution">
-   Plotting the solution
+  <a class="reference internal nav-link" href="#plotting-the-solution-over-a-line">
+   Plotting the solution over a line
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#making-curve-plots-throughout-the-domain">
    Making curve plots throughout the domain
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#using-paraview">
-     Using Paraview
-    </a>
-   </li>
-  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#saving-functions-to-file">
+   Saving functions to file
+  </a>
  </li>
 </ul>
 
@@ -475,8 +479,8 @@ Python-classes. The class will have an initializer, where we store the two physi
 </div>
 </div>
 </div>
-<div class="section" id="plotting-the-solution">
-<h2>Plotting the solution<a class="headerlink" href="#plotting-the-solution" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="plotting-the-solution-over-a-line">
+<h2>Plotting the solution over a line<a class="headerlink" href="#plotting-the-solution-over-a-line" title="Permalink to this headline">¶</a></h2>
 <p>We first plot the load and deflection with matplotlib</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -496,7 +500,7 @@ Python-classes. The class will have an initializer, where we store the two physi
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.tri.tricontour.TriContourSet at 0x7f5c8e01feb0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.tri.tricontour.TriContourSet at 0x7f831965eeb0&gt;
 </pre></div>
 </div>
 <img alt="../_images/membrane_code_27_1.png" src="../_images/membrane_code_27_1.png" />
@@ -536,14 +540,15 @@ Python-classes. The class will have an initializer, where we store the two physi
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f5c8ce11910&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f8318451910&gt;
 </pre></div>
 </div>
 <img alt="../_images/membrane_code_29_1.png" src="../_images/membrane_code_29_1.png" />
 </div>
 </div>
-<div class="section" id="using-paraview">
-<h3>Using Paraview<a class="headerlink" href="#using-paraview" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="saving-functions-to-file">
+<h2>Saving functions to file<a class="headerlink" href="#saving-functions-to-file" title="Permalink to this headline">¶</a></h2>
 <p>As mentioned in the previous section, we can also use Paraview to visualize the solution.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -557,16 +562,6 @@ Python-classes. The class will have an initializer, where we store the two physi
 </pre></div>
 </div>
 </div>
-</div>
-<p>Note that we gave the functions <code class="docutils literal notranslate"><span class="pre">p</span></code> and <code class="docutils literal notranslate"><span class="pre">uh</span></code> new names, to make them easier to identitify in Paraview. We start by opening Paraview. We start by opening the file by pressing <code class="docutils literal notranslate"><span class="pre">File-&gt;Open</span></code>.
-The next step is to visualize each of the functions. To do this, we choose <code class="docutils literal notranslate"><span class="pre">Filters-&gt;Alphabetic-&gt;ExtractBlock</span></code>. The next step is to select the first Unstructured Grid and press <code class="docutils literal notranslate"><span class="pre">Apply</span></code> as shown below:</p>
-<p><img alt="Select Block" src="../_images/select_block.png" /></p>
-<p>We can select the other block to visualize the deflection. There are also options to visualize the deflection in three dimensions using <code class="docutils literal notranslate"><span class="pre">Filters-&gt;Alphabetical-&gt;Warp</span> <span class="pre">By</span> <span class="pre">Scalar</span></code>, and change the layout to 3D by pressing the <code class="docutils literal notranslate"><span class="pre">2D</span></code>-button.</p>
-<p><img alt="Change interactive layout" src="../_images/2Dto3D.png" /></p>
-<p>Finally, press the <code class="docutils literal notranslate"><span class="pre">Set</span> <span class="pre">view</span> <span class="pre">direction</span> <span class="pre">button</span></code>.</p>
-<p><img alt="Set view direction" src="../_images/axis.png" /></p>
-<p>With these instructions, you can obtain the following figures</p>
-<p><img alt="Results for membrane" src="../_images/result_membrane.png" /></p>
 </div>
 </div>
 </div>
@@ -600,6 +595,7 @@ The next step is to visualize each of the functions. To do this, we choose <code
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="membrane.html" title="previous page">Deflection of a membrane</a>
+    <a class='right-next' id="next-link" href="membrane_paraview.html" title="next page">Using Paraview for visualization</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
