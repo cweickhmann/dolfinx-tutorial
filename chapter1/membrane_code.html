@@ -248,6 +248,20 @@
     <!-- Table of contents -->
     <div class="d-none d-md-block col-md-2 bd-toc show">
         
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#creating-the-mesh">
+   Creating the mesh
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
     </div>
 </div>
     <div id="main-content" class="row">
@@ -258,11 +272,98 @@
   <div class="section" id="implementation">
 <h1>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h1>
 <p>Authors: Hans Petter Langtangen and Anders Logg.</p>
-<p>Modified to dolfin-X by Jørgen S. Dokken</p>
+<p>Modified and adapted by X by Jørgen S. Dokken</p>
+<div class="section" id="creating-the-mesh">
+<h2>Creating the mesh<a class="headerlink" href="#creating-the-mesh" title="Permalink to this headline">¶</a></h2>
+<p>To create the computational geometry, we use the python-API of <a class="reference external" href="http://gmsh.info/">GMSH</a>. We start by import the gmsh-module, and initalizing it.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dolfinx</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gmsh</span>
+<span class="n">gmsh</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
 </pre></div>
+</div>
+</div>
+</div>
+<p>The next step is to create the membrane and starting the computations by the GMSH CAD kernel, to generate the relevant underlying data structures. The arguments into <code class="docutils literal notranslate"><span class="pre">addDisk</span></code> is the x, y and z coordinate of the center of the circle, while the to last argument is the x-radius and y-radius.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">membrane</span> <span class="o">=</span> <span class="n">gmsh</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">occ</span><span class="o">.</span><span class="n">addDisk</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">gmsh</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">occ</span><span class="o">.</span><span class="n">synchronize</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The next step is to make the membrane a physical surface, such that it is recognized by gmsh when generating the mesh. As a surface is a two-dimensional entity, we add two as the first argument, and the entity tag of the as the second argument. The last argument is the physical tag. In a later demo, we will get into when this tag matters.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gdim</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">status</span> <span class="o">=</span> <span class="n">gmsh</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">addPhysicalGroup</span><span class="p">(</span><span class="n">gdim</span><span class="p">,</span> <span class="p">[</span><span class="n">membrane</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, we generate the two-dimensional mesh. We make the output in gmsh visible by setting the <code class="docutils literal notranslate"><span class="pre">Terminal</span></code> option</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gmsh</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">gdim</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We will import the GMSH-mesh directly from GMSH, using the approach in Section 2 of <a class="reference external" href="http://jsdokken.com/converted_files/tutorial_gmsh.html">A GMSH tutorial for dolfinx</a>. To make sure this runs in parallel and  serial, we will read in the mesh on one processor, and let dolfin-X distribute the mesh data among the processros.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dolfinx.io</span> <span class="k">import</span> <span class="n">extract_gmsh_geometry</span><span class="p">,</span><span class="n">extract_gmsh_topology_and_markers</span><span class="p">,</span> <span class="n">ufl_mesh_from_gmsh</span>
+<span class="kn">from</span> <span class="nn">mpi4py</span> <span class="k">import</span> <span class="n">MPI</span>
+<span class="k">if</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="c1"># Get mesh geometry</span>
+    <span class="n">geometry_data</span> <span class="o">=</span> <span class="n">extract_gmsh_geometry</span><span class="p">(</span><span class="n">gmsh</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+    <span class="c1"># Get mesh topology for each element</span>
+    <span class="n">topology_data</span> <span class="o">=</span> <span class="n">extract_gmsh_topology_and_markers</span><span class="p">(</span><span class="n">gmsh</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:py.warnings:/usr/lib/python3/dist-packages/numpy/ctypeslib.py:531: RuntimeWarning: A builtin ctypes object gave a PEP3118 format string that does not match its itemsize, so a best-guess will be made of the data type. Newer versions of python may behave correctly.
+  return array(obj, copy=False)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The topology data is a dictionary, where the key is the gmsh cell type (an integer). Each key accesses a dictionary with the topology data and corresponding topology markers. As this mesh only contains one cell type (triangles), as we did not mark any facets, we do not need to loop over the keys of this dictionary, only extract the first one.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="c1"># Extract the cell type and number of nodes per cell and broadcast</span>
+    <span class="c1"># it to the other processors </span>
+    <span class="n">gmsh_cell_type</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">topology_data</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>    
+    <span class="n">properties</span> <span class="o">=</span> <span class="n">gmsh</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">getElementProperties</span><span class="p">(</span><span class="n">gmsh_cell_type</span><span class="p">)</span>
+    <span class="n">name</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">,</span> <span class="n">local_coords</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">properties</span>
+    <span class="n">cells</span> <span class="o">=</span> <span class="n">topology_data</span><span class="p">[</span><span class="n">gmsh_cell_type</span><span class="p">][</span><span class="s2">&quot;topology&quot;</span><span class="p">]</span>
+    <span class="n">cell_id</span><span class="p">,</span> <span class="n">num_nodes</span> <span class="o">=</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span><span class="o">.</span><span class="n">bcast</span><span class="p">([</span><span class="n">gmsh_cell_type</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">],</span> <span class="n">root</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>        
+    <span class="n">cell_id</span><span class="p">,</span> <span class="n">num_nodes</span> <span class="o">=</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span><span class="o">.</span><span class="n">bcast</span><span class="p">([</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">root</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">cells</span><span class="p">,</span> <span class="n">geometry_data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">]),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">gdim</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As we have now broadcased all the information required to distribute the mesh in parallel</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dolfinx.cpp.io</span> <span class="k">import</span> <span class="n">perm_gmsh</span>
+<span class="kn">from</span> <span class="nn">dolfinx.cpp.mesh</span> <span class="k">import</span> <span class="n">to_type</span>
+<span class="kn">from</span> <span class="nn">dolfinx.mesh</span> <span class="k">import</span> <span class="n">create_mesh</span>
+
+<span class="c1"># Permute topology data from MSH-ordering to dolfinx-ordering</span>
+<span class="n">ufl_domain</span> <span class="o">=</span> <span class="n">ufl_mesh_from_gmsh</span><span class="p">(</span><span class="n">cell_id</span><span class="p">,</span> <span class="n">gdim</span><span class="p">)</span>
+<span class="n">gmsh_cell_perm</span> <span class="o">=</span> <span class="n">perm_gmsh</span><span class="p">(</span><span class="n">to_type</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ufl_domain</span><span class="o">.</span><span class="n">ufl_cell</span><span class="p">())),</span> <span class="n">num_nodes</span><span class="p">)</span>
+<span class="n">cells</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[:,</span> <span class="n">gmsh_cell_perm</span><span class="p">]</span>
+
+<span class="c1"># Create distributed mesh</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">create_mesh</span><span class="p">(</span><span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span><span class="p">,</span> <span class="n">cells</span><span class="p">,</span> <span class="n">geometry_data</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gdim</span><span class="p">],</span> <span class="n">ufl_domain</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 </div>
 </div>
