@@ -302,13 +302,14 @@
                 
   <div class="section" id="implementation">
 <h1>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h1>
+<p>Author: Jørgen S. Dokken</p>
 <p>In our program, we need to implement the time-stepping manually, but we can rely on dolfin-X to easily compute <span class="math notranslate nohighlight">\(a_0, L_0, a\)</span> and <span class="math notranslate nohighlight">\(L\)</span> and solve the linear system for the unknowns.</p>
 <div class="section" id="test-problem-1-a-known-analytical-solution">
 <h2>Test problem 1: A known analytical solution<a class="headerlink" href="#test-problem-1-a-known-analytical-solution" title="Permalink to this headline">¶</a></h2>
 <p>Just as for the Poisson problem from the previous chapter, we construct a test problem which makes it easy to determine if the calculations are correct.</p>
 <p>Since we know that our first-order time-stepping scheme is exact for linear functions, we create a problem which has linear variation in time. We combine this with a quadratic variation in space. Therefore, we choose the analytical solution to be</p>
-<div class="amsmath math notranslate nohighlight" id="equation-495dc30c-cc83-4a2b-bca7-e33187cecda5">
-<span class="eqno">(18)<a class="headerlink" href="#equation-495dc30c-cc83-4a2b-bca7-e33187cecda5" title="Permalink to this equation">¶</a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-278c75dc-646f-4cb3-8946-2d4cc70ee889">
+<span class="eqno">(18)<a class="headerlink" href="#equation-278c75dc-646f-4cb3-8946-2d4cc70ee889" title="Permalink to this equation">¶</a></span>\[\begin{align}
 u = 1 + x^2+\alpha y^2 + \beta t
 \end{align}\]</div>
 <p>which yields a function whose computed values at the degrees of freedom will be exact, regardless of the mesh size and <span class="math notranslate nohighlight">\(\Delta t\)</span> as long as the mesh is uniformly partitioned.
