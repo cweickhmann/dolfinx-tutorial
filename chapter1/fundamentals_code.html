@@ -157,6 +157,23 @@
   </i>
  </li>
 </ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  A Gallery of finite element solvers
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../chapter2/intro.html">
+   Summary
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../chapter2/heat_equation.html">
+   The heat equation
+  </a>
+ </li>
+</ul>
 
 </nav> <!-- To handle the deprecated key -->
 
@@ -327,13 +344,13 @@ Therefore, we need to make specific choices of <span class="math notranslate noh
 <!-- Particularly, piecewise linear continuous Galerkin finite elements are able to exactly reproduce a quadratic polynomial on 
 a uniformly partitioned mesh. -->
 <p>We use this fact to construct a quadratic function in <span class="math notranslate nohighlight">\(2D\)</span>. In particular we choose</p>
-<div class="amsmath math notranslate nohighlight" id="equation-00c27248-aad8-441b-aa39-a714fcb3fb3d">
-<span class="eqno">(1)<a class="headerlink" href="#equation-00c27248-aad8-441b-aa39-a714fcb3fb3d" title="Permalink to this equation">¶</a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-47f59e1b-be9d-4f3e-a041-3a9df231fa07">
+<span class="eqno">(1)<a class="headerlink" href="#equation-47f59e1b-be9d-4f3e-a041-3a9df231fa07" title="Permalink to this equation">¶</a></span>\[\begin{align}
  u_e(x,y)=1+x^2+2y^2
  \end{align}\]</div>
 <p>Inserting <span class="math notranslate nohighlight">\(u_e\)</span> in the original boundary problem, we find that</p>
-<div class="amsmath math notranslate nohighlight" id="equation-ffcc3ee6-f1a6-4f83-9b7b-ed58a6a7e048">
-<span class="eqno">(2)<a class="headerlink" href="#equation-ffcc3ee6-f1a6-4f83-9b7b-ed58a6a7e048" title="Permalink to this equation">¶</a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-8f50fc51-a18c-4317-9d2f-38410bded69d">
+<span class="eqno">(2)<a class="headerlink" href="#equation-8f50fc51-a18c-4317-9d2f-38410bded69d" title="Permalink to this equation">¶</a></span>\[\begin{align}
     f(x,y)= -6,\qquad u_d(x,y)=u_e(x,y)=1+x^2+2y^2,
 \end{align}\]</div>
 <p>regardless of the shape of the domain as long as we prescribe
