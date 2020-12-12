@@ -165,7 +165,7 @@
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../chapter2/intro.html">
-   Summary
+   A Gallery of finite element solvers
   </a>
  </li>
  <li class="toctree-l1">
@@ -284,6 +284,11 @@
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#defining-the-load">
    Defining the load
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#interpolation-of-the-pressure">
+   Interpolation of the pressure
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -444,7 +449,10 @@ Python-classes. The class will have an initializer, where we store the two physi
 </div>
 </div>
 </div>
-<p>To be able to use this class in a variational formulation, we interpolate this function into the appropriate function space. In this case, we will use the same function space as we use for our approximate solution</p>
+</div>
+<div class="section" id="interpolation-of-the-pressure">
+<h2>Interpolation of the pressure<a class="headerlink" href="#interpolation-of-the-pressure" title="Permalink to this headline">¶</a></h2>
+<p>To be able to use this class in a variational formulation, we interpolate this function into the appropriate function space. In this case, we will use the same function space as we use for our approximate solution. An interpolation uses that any finite element function can be written as <span class="math notranslate nohighlight">\(p=\sum_{j=1}^N P_j\phi_j\)</span>, where we set <span class="math notranslate nohighlight">\(P_j=p(x_j, y_j)\)</span> where <span class="math notranslate nohighlight">\((x_j,y_j)\)</span> are the coordinates of the node number <span class="math notranslate nohighlight">\(j\)</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">dolfinx</span><span class="o">.</span><span class="n">Function</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
@@ -517,7 +525,7 @@ Python-classes. The class will have an initializer, where we store the two physi
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.tri.tricontour.TriContourSet at 0x7f210411aeb0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.tri.tricontour.TriContourSet at 0x7fb32b4d7eb0&gt;
 </pre></div>
 </div>
 <img alt="../_images/membrane_code_27_1.png" src="../_images/membrane_code_27_1.png" />
@@ -557,7 +565,7 @@ Python-classes. The class will have an initializer, where we store the two physi
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f2102f0d910&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fb32a2c8910&gt;
 </pre></div>
 </div>
 <img alt="../_images/membrane_code_29_1.png" src="../_images/membrane_code_29_1.png" />
