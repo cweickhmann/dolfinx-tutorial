@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Implementation &#8212; FEniCS-X tutorial</title>
+    <title>Test problem 1: A known analytical solution &#8212; FEniCS-X tutorial</title>
     
   <link rel="stylesheet" href="../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
 
@@ -174,7 +174,7 @@
   <ul class="current collapse-ul">
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     Implementation
+     Test problem 1: A known analytical solution
     </a>
    </li>
   </ul>
@@ -285,8 +285,38 @@
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#test-problem-1-a-known-analytical-solution">
-   Test problem 1: A known analytical solution
+  <a class="reference internal nav-link" href="#defining-the-exact-solution">
+   Defining the exact solution
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#defining-the-boundary-condition">
+   Defining the boundary condition
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#defining-the-variational-formualation">
+   Defining the variational formualation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#create-the-matrix-and-and-vector-for-the-linear-problem">
+   Create the matrix and and vector for the linear problem
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-a-linear-variational-solver">
+   Define a linear variational solver
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#solving-the-time-dependent-problem">
+   Solving the time-dependent problem
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#verifying-the-numerical-solution">
+   Verifying the numerical solution
   </a>
  </li>
 </ul>
@@ -300,16 +330,13 @@
         
               <div>
                 
-  <div class="section" id="implementation">
-<h1>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="test-problem-1-a-known-analytical-solution">
+<h1>Test problem 1: A known analytical solution<a class="headerlink" href="#test-problem-1-a-known-analytical-solution" title="Permalink to this headline">¶</a></h1>
 <p>Author: Jørgen S. Dokken</p>
-<p>In our program, we need to implement the time-stepping manually, but we can rely on dolfin-X to easily compute <span class="math notranslate nohighlight">\(a_0, L_0, a\)</span> and <span class="math notranslate nohighlight">\(L\)</span> and solve the linear system for the unknowns.</p>
-<div class="section" id="test-problem-1-a-known-analytical-solution">
-<h2>Test problem 1: A known analytical solution<a class="headerlink" href="#test-problem-1-a-known-analytical-solution" title="Permalink to this headline">¶</a></h2>
 <p>Just as for the Poisson problem from the previous chapter, we construct a test problem which makes it easy to determine if the calculations are correct.</p>
 <p>Since we know that our first-order time-stepping scheme is exact for linear functions, we create a problem which has linear variation in time. We combine this with a quadratic variation in space. Therefore, we choose the analytical solution to be</p>
-<div class="amsmath math notranslate nohighlight" id="equation-278c75dc-646f-4cb3-8946-2d4cc70ee889">
-<span class="eqno">(18)<a class="headerlink" href="#equation-278c75dc-646f-4cb3-8946-2d4cc70ee889" title="Permalink to this equation">¶</a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-84da9eb8-d892-4c9e-89b3-59abccf49374">
+<span class="eqno">(18)<a class="headerlink" href="#equation-84da9eb8-d892-4c9e-89b3-59abccf49374" title="Permalink to this equation">¶</a></span>\[\begin{align}
 u = 1 + x^2+\alpha y^2 + \beta t
 \end{align}\]</div>
 <p>which yields a function whose computed values at the degrees of freedom will be exact, regardless of the mesh size and <span class="math notranslate nohighlight">\(\Delta t\)</span> as long as the mesh is uniformly partitioned.
@@ -343,6 +370,8 @@ By inserting this into our original PDE, we find that the right hand side <span 
 </div>
 </div>
 </div>
+<div class="section" id="defining-the-exact-solution">
+<h2>Defining the exact solution<a class="headerlink" href="#defining-the-exact-solution" title="Permalink to this headline">¶</a></h2>
 <p>As in the membrane problem, we create a Python-class to resemble the exact solution</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -358,6 +387,9 @@ By inserting this into our original PDE, we find that the right hand side <span 
 </div>
 </div>
 </div>
+</div>
+<div class="section" id="defining-the-boundary-condition">
+<h2>Defining the boundary condition<a class="headerlink" href="#defining-the-boundary-condition" title="Permalink to this headline">¶</a></h2>
 <p>As in the previous chapters, we define a Dirichlet boundary condition over the whole boundary</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -372,6 +404,9 @@ By inserting this into our original PDE, we find that the right hand side <span 
 </div>
 </div>
 </div>
+</div>
+<div class="section" id="defining-the-variational-formualation">
+<h2>Defining the variational formualation<a class="headerlink" href="#defining-the-variational-formualation" title="Permalink to this headline">¶</a></h2>
 <p>As we have set <span class="math notranslate nohighlight">\(t=0\)</span> in <code class="docutils literal notranslate"><span class="pre">u_exact</span></code>, we can reuse this variable to obtain <span class="math notranslate nohighlight">\(u_n\)</span> for the first time step.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -402,6 +437,9 @@ By inserting this into our original PDE, we find that the right hand side <span 
 </div>
 </div>
 </div>
+</div>
+<div class="section" id="create-the-matrix-and-and-vector-for-the-linear-problem">
+<h2>Create the matrix and and vector for the linear problem<a class="headerlink" href="#create-the-matrix-and-and-vector-for-the-linear-problem" title="Permalink to this headline">¶</a></h2>
 <p>To ensure that we are solving the variational problem efficiently, we will create several structures which can reuse data, such as matrix sparisty patterns. Especially note as the bilinear form <code class="docutils literal notranslate"><span class="pre">a</span></code> is independent of time, we only need to assemble the matrix once.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -415,6 +453,9 @@ By inserting this into our original PDE, we find that the right hand side <span 
 </div>
 </div>
 </div>
+</div>
+<div class="section" id="define-a-linear-variational-solver">
+<h2>Define a linear variational solver<a class="headerlink" href="#define-a-linear-variational-solver" title="Permalink to this headline">¶</a></h2>
 <p>We will use <a class="reference external" href="https://www.mcs.anl.gov/petsc/">PETSc</a> to solve the resulting linear algebra problem. We use the Python-API <code class="docutils literal notranslate"><span class="pre">petsc4py</span></code> to define the solver. We will use a linear solver.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -426,6 +467,9 @@ By inserting this into our original PDE, we find that the right hand side <span 
 </div>
 </div>
 </div>
+</div>
+<div class="section" id="solving-the-time-dependent-problem">
+<h2>Solving the time-dependent problem<a class="headerlink" href="#solving-the-time-dependent-problem" title="Permalink to this headline">¶</a></h2>
 <p>With these structures in place, we crete our time-stepping loop.
 In this loop, we first update the Dirichlet boundary condition by interpolating the updated
 expression <code class="docutils literal notranslate"><span class="pre">u_exact</span></code> into <code class="docutils literal notranslate"><span class="pre">V</span></code>. The next step is to re-assemble the vector <code class="docutils literal notranslate"><span class="pre">b</span></code>, with the update <code class="docutils literal notranslate"><span class="pre">u_n</span></code>.
@@ -458,6 +502,9 @@ Then we solve the problem using PETSc and update <code class="docutils literal n
 </div>
 </div>
 </div>
+</div>
+<div class="section" id="verifying-the-numerical-solution">
+<h2>Verifying the numerical solution<a class="headerlink" href="#verifying-the-numerical-solution" title="Permalink to this headline">¶</a></h2>
 <p>As in the first chapter, we compute the L2-error and the error at the mesh vertices
 to verify our implementation.</p>
 <div class="cell docutils container">
