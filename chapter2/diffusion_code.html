@@ -57,6 +57,7 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="A nonlinear Poisson equation" href="nonlinpoisson.html" />
     <link rel="prev" title="Test problem 1: A known analytical solution" href="heat_code.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -180,6 +181,20 @@
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      Test Problem 2: Diffusion of a Gaussian function
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="nonlinpoisson.html">
+   A nonlinear Poisson equation
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="nonlinpoisson_code.html">
+     Implementation
     </a>
    </li>
   </ul>
@@ -322,9 +337,10 @@
                 
   <div class="section" id="test-problem-2-diffusion-of-a-gaussian-function">
 <h1>Test Problem 2: Diffusion of a Gaussian function<a class="headerlink" href="#test-problem-2-diffusion-of-a-gaussian-function" title="Permalink to this headline">¶</a></h1>
+<p>Author: Jørgen S. Dokken</p>
 <p>Let us now solve a more interesting problem, namely the diffusion of a Gaussian hill. We take the initial value to be</p>
-<div class="amsmath math notranslate nohighlight" id="equation-d81e6540-f053-4053-b704-955e36bcaadd">
-<span class="eqno">(19)<a class="headerlink" href="#equation-d81e6540-f053-4053-b704-955e36bcaadd" title="Permalink to this equation">¶</a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-c9d1f62c-3b76-4c34-8d7c-31e40cbd57a8">
+<span class="eqno">(19)<a class="headerlink" href="#equation-c9d1f62c-3b76-4c34-8d7c-31e40cbd57a8" title="Permalink to this equation">¶</a></span>\[\begin{align}
     u_0(x,y)&amp;= e^{-ax^2-ay^2}
 \end{align}\]</div>
 <p>for <span class="math notranslate nohighlight">\(a=5\)</span> on the domain <span class="math notranslate nohighlight">\([-2,-2]\times[2,2]\)</span>. For this problem we will use homogeneous Dirichlet boundary conditions (<span class="math notranslate nohighlight">\(u_D=0\)</span>).</p>
@@ -518,6 +534,7 @@ this could be read (<code class="docutils literal notranslate"><span class="pre"
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="heat_code.html" title="previous page">Test problem 1: A known analytical solution</a>
+    <a class='right-next' id="next-link" href="nonlinpoisson.html" title="next page">A nonlinear Poisson equation</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

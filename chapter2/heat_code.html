@@ -57,7 +57,7 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Time-dependent output" href="diffusion_code.html" />
+    <link rel="next" title="Test Problem 2: Diffusion of a Gaussian function" href="diffusion_code.html" />
     <link rel="prev" title="The heat equation" href="heat_equation.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -180,22 +180,21 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="diffusion_code.html">
-     Time-dependent output
+     Test Problem 2: Diffusion of a Gaussian function
     </a>
    </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="nonlinpoisson.html">
+   A nonlinear Poisson equation
+  </a>
+  <ul class="collapse-ul">
    <li class="toctree-l2">
-    <a class="reference internal" href="diffusion_code.html#variational-problem-and-solver">
-     Variational problem and solver
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="diffusion_code.html#solve-time-dependent-problem">
-     Solve time-dependent problem
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="diffusion_code.html#animation-with-paraview">
-     Animation with Paraview
+    <a class="reference internal" href="nonlinpoisson_code.html">
+     Implementation
     </a>
    </li>
   </ul>
@@ -356,8 +355,8 @@
 <p>Author: Jørgen S. Dokken</p>
 <p>Just as for the Poisson problem from the previous chapter, we construct a test problem which makes it easy to determine if the calculations are correct.</p>
 <p>Since we know that our first-order time-stepping scheme is exact for linear functions, we create a problem which has linear variation in time. We combine this with a quadratic variation in space. Therefore, we choose the analytical solution to be</p>
-<div class="amsmath math notranslate nohighlight" id="equation-cd5fb137-83f0-41b7-9668-264fd99ba1da">
-<span class="eqno">(18)<a class="headerlink" href="#equation-cd5fb137-83f0-41b7-9668-264fd99ba1da" title="Permalink to this equation">¶</a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-60a02d88-eff4-4588-922d-0d5d4da05a02">
+<span class="eqno">(18)<a class="headerlink" href="#equation-60a02d88-eff4-4588-922d-0d5d4da05a02" title="Permalink to this equation">¶</a></span>\[\begin{align}
 u = 1 + x^2+\alpha y^2 + \beta t
 \end{align}\]</div>
 <p>which yields a function whose computed values at the degrees of freedom will be exact, regardless of the mesh size and <span class="math notranslate nohighlight">\(\Delta t\)</span> as long as the mesh is uniformly partitioned.
@@ -585,7 +584,7 @@ Error_max = 1.78e-15
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="heat_equation.html" title="previous page">The heat equation</a>
-    <a class='right-next' id="next-link" href="diffusion_code.html" title="next page">Time-dependent output</a>
+    <a class='right-next' id="next-link" href="diffusion_code.html" title="next page">Test Problem 2: Diffusion of a Gaussian function</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
